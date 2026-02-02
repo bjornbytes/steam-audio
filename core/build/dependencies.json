@@ -84,7 +84,7 @@
         },
         "fetch": {
             "git": "https://github.com/marton78/pffft.git",
-            "tag": "e0bf595c98ded55cc457a371c1b29c8cab552628"
+            "tag": "d321d006467fcdcafc4298901c27541a18da598c"
         },
         "configure": {
             "cmake": [
