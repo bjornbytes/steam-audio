@@ -17,23 +17,23 @@ include(SteamAudioHelpers)
 
 get_bin_subdir(IPL_BIN_SUBDIR)
 
-set(ZLIB_ROOT ${CMAKE_HOME_DIRECTORY}/deps/zlib/lib/${IPL_BIN_SUBDIR}/release) # look here first
-set(ZLIB_INCLUDE_DIR ${CMAKE_HOME_DIRECTORY}/deps/zlib/include) # deps/zlib is structured differently than a typical zlib install root, so point to this explicitly
+set(ZLIB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib/lib/${IPL_BIN_SUBDIR}/release) # look here first
+set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib/include) # deps/zlib is structured differently than a typical zlib install root, so point to this explicitly
 find_package(ZLIB REQUIRED)
 
 find_path(MySOFA_INCLUDE_DIR
 	NAMES 			mysofa.h
-	PATHS 			${CMAKE_HOME_DIRECTORY}/deps/mysofa/include
+	PATHS 			${CMAKE_CURRENT_SOURCE_DIR}/deps/mysofa/include
 )
 
 find_library(MySOFA_LIBRARY
 	NAMES mysofa
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/mysofa/lib/${IPL_BIN_SUBDIR}/release
+	PATHS ${CMAKE_CURRENT_SOURCE_DIR}/deps/mysofa/lib/${IPL_BIN_SUBDIR}/release
 )
 
 find_library(MySOFA_LIBRARY_DEBUG
 	NAMES mysofa
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/mysofa/lib/${IPL_BIN_SUBDIR}/debug
+	PATHS ${CMAKE_CURRENT_SOURCE_DIR}/deps/mysofa/lib/${IPL_BIN_SUBDIR}/debug
 )
 
 find_package_handle_standard_args(MySOFA

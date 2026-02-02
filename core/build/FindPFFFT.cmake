@@ -19,17 +19,17 @@ get_bin_subdir(IPL_BIN_SUBDIR)
 
 find_path(PFFFT_INCLUDE_DIR
 	NAMES 			pffft.h
-	PATHS 			${CMAKE_HOME_DIRECTORY}/deps/pffft/include
+	PATHS 			${CMAKE_CURRENT_SOURCE_DIR}/deps/pffft/include
 )
 
 find_library(PFFFT_LIBRARY
 	NAMES pffft
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/pffft/lib/${IPL_BIN_SUBDIR}/release
+	PATHS ${CMAKE_CURRENT_SOURCE_DIR}/deps/pffft/lib/${IPL_BIN_SUBDIR}/release
 )
 
 find_library(PFFFT_LIBRARY_DEBUG
 	NAMES pffft
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/pffft/lib/${IPL_BIN_SUBDIR}/debug
+	PATHS ${CMAKE_CURRENT_SOURCE_DIR}/deps/pffft/lib/${IPL_BIN_SUBDIR}/debug
 )
 
 find_package_handle_standard_args(PFFFT
