@@ -177,8 +177,10 @@ endif()
 # HRTF DATA
 #
 
-add_library(hrtf OBJECT hrtf.cpp)
-target_include_directories(hrtf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+if (STEAMAUDIO_ENABLE_DEFAULT_HRTF)
+    add_library(hrtf OBJECT hrtf.cpp)
+    target_include_directories(hrtf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
 
 
 #
@@ -663,6 +665,10 @@ source_group("OpenCL Files" FILES ${CL_SOURCE})
 
 target_compile_definitions(core PRIVATE STEAMAUDIO_BUILDING_CORE)
 
+if (NOT STEAMAUDIO_ENABLE_DEFAULT_HRTF)
+    target_compile_definitions(core PRIVATE IPL_DISABLE_DEFAULT_HRTF)
+endif()
+
 target_precompile_headers(core PUBLIC pch.h)
 
 
@@ -676,13 +682,19 @@ else()
     add_library(phonon STATIC pch.cpp)
 endif()
 
-target_link_libraries(phonon PRIVATE core hrtf)
+target_link_libraries(phonon PRIVATE core)
+if (STEAMAUDIO_ENABLE_DEFAULT_HRTF)
+    target_link_libraries(phonon PRIVATE hrtf)
+endif()
 
 if (IPL_OS_MACOS)
     add_library(phonon_bundle MODULE pch.cpp)
     set_target_properties(phonon_bundle PROPERTIES BUNDLE TRUE)
     set_target_properties(phonon_bundle PROPERTIES OUTPUT_NAME phonon)
-    target_link_libraries(phonon_bundle PRIVATE core hrtf)
+    target_link_libraries(phonon_bundle PRIVATE core)
+    if (STEAMAUDIO_ENABLE_DEFAULT_HRTF)
+        target_link_libraries(phonon_bundle PRIVATE hrtf)
+    endif()
 endif()
 
 target_compile_definitions(phonon PRIVATE STEAMAUDIO_BUILDING_CORE)

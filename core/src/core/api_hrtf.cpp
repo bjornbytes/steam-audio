@@ -94,6 +94,11 @@ IPLerror CContext::createHRTF(IPLAudioSettings* audioSettings,
     if (hrtfSettings->type == IPL_HRTFTYPE_SOFA && hrtfSettings->sofaData != nullptr && hrtfSettings->sofaDataSize == 0)
         return IPL_STATUS_FAILURE;
 
+#ifdef IPL_DISABLE_DEFAULT_HRTF
+    if (hrtfSettings->type == IPL_HRTFTYPE_DEFAULT)
+        return IPL_STATUS_FAILURE;
+#endif
+
     try
     {
         auto _hrtf = reinterpret_cast<CHRTF*>(gMemory().allocate(sizeof(CHRTF), Memory::kDefaultAlignment));

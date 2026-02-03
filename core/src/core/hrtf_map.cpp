@@ -22,7 +22,9 @@
 #include "polar_vector.h"
 #include "sh.h"
 
+#ifndef IPL_DISABLE_DEFAULT_HRTF
 extern ipl::byte_t gDefaultHrtfData[];
+#endif
 
 namespace ipl {
 
@@ -63,7 +65,11 @@ namespace ipl {
 
 HRTFMap::HRTFMap(int samplingRate, const uint8_t* hrtfData /* = nullptr */)
 {
+#ifdef IPL_DISABLE_DEFAULT_HRTF
+    const byte_t* readPointer = hrtfData;
+#else
     const byte_t* readPointer = (hrtfData) ? hrtfData : gDefaultHrtfData;
+#endif
 
     verifyDataHeader(readPointer);
     loadNumHRIRs(readPointer);

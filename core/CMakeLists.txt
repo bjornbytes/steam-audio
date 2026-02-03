@@ -93,6 +93,9 @@ option(STEAMAUDIO_BUILD_SAMPLES "Build samples." ON)
 # Whether to enable serialization support
 option(STEAMAUDIO_ENABLE_SERIALIZATION "Enable serialization support." ON)
 
+# Whether to enable the default HRTF
+option(STEAMAUDIO_ENABLE_DEFAULT_HRTF "Enable the built-in default HRTF." ON)
+
 if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     option(STEAMAUDIO_BUILD_ITESTS "Build interactive tests." ON)
     option(STEAMAUDIO_BUILD_DOCS "Build documentation." ON)
