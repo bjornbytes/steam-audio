@@ -255,7 +255,8 @@ if (STEAMAUDIO_ENABLE_MKL)
     endif()
 endif()
 
-find_package(MySOFA REQUIRED)
+set(BUILD_TESTS OFF CACHE BOOL "")
+add_subdirectory(deps/mysofa EXCLUDE_FROM_ALL)
 
 if (STEAMAUDIO_ENABLE_SERIALIZATION)
     find_package(FlatBuffers REQUIRED)

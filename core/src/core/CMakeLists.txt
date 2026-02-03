@@ -630,7 +630,9 @@ elseif (FFT_LIBRARY STREQUAL "PFFFT")
     target_link_libraries(core PUBLIC PFFFT)
 endif()
 
-target_link_libraries(core PUBLIC MySOFA::MySOFA)
+target_include_directories(core PRIVATE "${PROJECT_SOURCE_DIR}/deps/mysofa/src/hrtf")
+target_include_directories(core PUBLIC "${PROJECT_BINARY_DIR}/deps/mysofa/src")
+target_link_libraries(core PUBLIC mysofa-static)
 
 if (STEAMAUDIO_ENABLE_SERIALIZATION)
     add_dependencies(core fbschemas)
