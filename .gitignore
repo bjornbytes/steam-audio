@@ -17,8 +17,6 @@ unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.so
 unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.dll
 unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.bundle
 
-core/deps-build
-core/deps
 core/src/fmod
 core/src/unity
 core/src/unreal

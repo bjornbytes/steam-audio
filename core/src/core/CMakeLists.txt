@@ -627,7 +627,7 @@ if (FFT_LIBRARY STREQUAL "IPP")
 elseif (FFT_LIBRARY STREQUAL "FFTS")
     target_link_libraries(core PUBLIC FFTS::FFTS)
 elseif (FFT_LIBRARY STREQUAL "PFFFT")
-    target_link_libraries(core PUBLIC PFFFT::PFFFT)
+    target_link_libraries(core PUBLIC PFFFT)
 endif()
 
 target_link_libraries(core PUBLIC MySOFA::MySOFA)

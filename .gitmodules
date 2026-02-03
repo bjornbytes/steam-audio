@@ -1,0 +1,3 @@
+[submodule "core/deps/pffft"]
+	path = core/deps/pffft
+	url = https://github.com/marton78/pffft.git
