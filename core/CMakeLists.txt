@@ -96,6 +96,9 @@ option(STEAMAUDIO_ENABLE_SERIALIZATION "Enable serialization support." ON)
 # Whether to enable the default HRTF
 option(STEAMAUDIO_ENABLE_DEFAULT_HRTF "Enable the built-in default HRTF." ON)
 
+# Whether to enable the validation layer
+option(STEAMAUDIO_ENABLE_VALIDATION "Enable the API validation layer." ON)
+
 if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     option(STEAMAUDIO_BUILD_ITESTS "Build interactive tests." ON)
     option(STEAMAUDIO_BUILD_DOCS "Build documentation." ON)

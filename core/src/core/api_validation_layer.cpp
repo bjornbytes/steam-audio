@@ -48,6 +48,8 @@
 
 namespace api {
 
+#ifdef IPL_ENABLE_VALIDATION
+
 // --------------------------------------------------------------------------------------------------------------------
 // API Object Helpers
 // --------------------------------------------------------------------------------------------------------------------
@@ -1307,59 +1309,6 @@ public:
     }
 };
 
-IPLerror CContext::createContext(IPLContextSettings* settings,
-                                 IContext** context)
-{
-    if (!settings || !context)
-        return IPL_STATUS_FAILURE;
-
-    if (!isVersionCompatible(settings->version))
-        return IPL_STATUS_FAILURE;
-
-    Context::sAPIVersion = settings->version;
-
-    auto _allocateCallback = reinterpret_cast<AllocateCallback>(settings->allocateCallback);
-    auto _freeCallback = reinterpret_cast<FreeCallback>(settings->freeCallback);
-    Context::sMemory.init(_allocateCallback, _freeCallback);
-
-    auto _enableValidation = false;
-    if (Context::isCallerAPIVersionAtLeast(4, 5))
-    {
-        _enableValidation = (settings->flags & IPL_CONTEXTFLAGS_VALIDATION);
-    }
-
-    if (_enableValidation)
-    {
-        VALIDATE_IPLContextSettings(settings);
-
-        try
-        {
-            auto _context = reinterpret_cast<CValidatedContext*>(gMemory().allocate(sizeof(CValidatedContext), Memory::kDefaultAlignment));
-            new (_context) CValidatedContext(settings);
-            *context = _context;
-        }
-        catch (Exception exception)
-        {
-            return static_cast<IPLerror>(exception.status());
-        }
-    }
-    else
-    {
-        try
-        {
-            auto _context = reinterpret_cast<CContext*>(gMemory().allocate(sizeof(CContext), Memory::kDefaultAlignment));
-            new (_context) CContext(settings);
-            *context = _context;
-        }
-        catch (Exception exception)
-        {
-            return static_cast<IPLerror>(exception.status());
-        }
-    }
-
-    return IPL_STATUS_SUCCESS;
-}
-
 
 // --------------------------------------------------------------------------------------------------------------------
 // CValidatedSerializedObject
@@ -2349,5 +2298,62 @@ public:
         CReconstructor::reconstruct(numInputs, inputs, sharedInputs, outputs);
     }
 };
+
+#endif
+
+IPLerror CContext::createContext(IPLContextSettings* settings,
+                                 IContext** context)
+{
+    if (!settings || !context)
+        return IPL_STATUS_FAILURE;
+
+    if (!isVersionCompatible(settings->version))
+        return IPL_STATUS_FAILURE;
+
+    Context::sAPIVersion = settings->version;
+
+    auto _allocateCallback = reinterpret_cast<AllocateCallback>(settings->allocateCallback);
+    auto _freeCallback = reinterpret_cast<FreeCallback>(settings->freeCallback);
+    Context::sMemory.init(_allocateCallback, _freeCallback);
+
+#ifdef IPL_ENABLE_VALIDATION
+    auto _enableValidation = false;
+    if (Context::isCallerAPIVersionAtLeast(4, 5))
+    {
+        _enableValidation = (settings->flags & IPL_CONTEXTFLAGS_VALIDATION);
+    }
+
+    if (_enableValidation)
+    {
+        VALIDATE_IPLContextSettings(settings);
+
+        try
+        {
+            auto _context = reinterpret_cast<CValidatedContext*>(gMemory().allocate(sizeof(CValidatedContext), Memory::kDefaultAlignment));
+            new (_context) CValidatedContext(settings);
+            *context = _context;
+        }
+        catch (Exception exception)
+        {
+            return static_cast<IPLerror>(exception.status());
+        }
+    }
+    else
+#endif
+    {
+        try
+        {
+            auto _context = reinterpret_cast<CContext*>(gMemory().allocate(sizeof(CContext), Memory::kDefaultAlignment));
+            new (_context) CContext(settings);
+            *context = _context;
+        }
+        catch (Exception exception)
+        {
+            return static_cast<IPLerror>(exception.status());
+        }
+    }
+
+    return IPL_STATUS_SUCCESS;
+}
 
 }

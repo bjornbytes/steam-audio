@@ -669,6 +669,10 @@ if (NOT STEAMAUDIO_ENABLE_DEFAULT_HRTF)
     target_compile_definitions(core PRIVATE IPL_DISABLE_DEFAULT_HRTF)
 endif()
 
+if (STEAMAUDIO_ENABLE_VALIDATION)
+    target_compile_definitions(core PRIVATE IPL_ENABLE_VALIDATION)
+endif()
+
 target_precompile_headers(core PUBLIC pch.h)
 
 
