@@ -272,7 +272,7 @@ private:
     float (IIRFilterer::* m_applyFloat)(float);
     float4_t (IIRFilterer::* m_applyFloat4)(float4_t);
 #if defined(IPL_ENABLE_FLOAT8)
-    float8_t (IPL_FLOAT8_ATTR IIRFilterer::* m_applyFloat8)(float8_t);
+    float8_t (IIRFilterer::* m_applyFloat8)(float8_t);
 #endif
     void (IIRFilterer::* m_applyFloatArray)(int, const float*, float*);
 
