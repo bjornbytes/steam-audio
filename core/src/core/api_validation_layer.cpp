@@ -826,7 +826,7 @@ std::string to_string(T* value)
 #define VALIDATE_IPLDeviationModel(value) { \
     if (value) { \
         VALIDATE_IPLDeviationModelType(value->type); \
-        if (value->type == IPL_AIRABSORPTIONTYPE_CALLBACK) { \
+        if (value->type == IPL_DEVIATIONTYPE_CALLBACK) { \
             VALIDATE_POINTER(value->callback); \
         } \
     } \

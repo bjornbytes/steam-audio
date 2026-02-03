@@ -427,6 +427,8 @@ void CSource::setInputs(IPLSimulationFlags flags,
                 case IPL_DEVIATIONTYPE_CALLBACK:
                     _source->pathingInputs.deviationModel = DeviationModel(inputs->deviationModel->callback, inputs->deviationModel->userData);
                     break;
+                default:
+                    break;
                 }
             }
         }
