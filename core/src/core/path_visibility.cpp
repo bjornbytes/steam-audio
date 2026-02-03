@@ -186,6 +186,7 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const IScene& scene,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 ProbeVisibilityGraph::ProbeVisibilityGraph(const Serialized::VisibilityGraph* serializedObject)
     : mNumJobsRemaining(0)
 {
@@ -221,6 +222,7 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const Serialized::VisibilityGraph* se
         }
     }
 }
+#endif
 
 void ProbeVisibilityGraph::updateCosts(const ProbeBatch& probeBatch)
 {
@@ -255,6 +257,7 @@ void ProbeVisibilityGraph::prune(const ProbeBatch& probes,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 uint64_t ProbeVisibilityGraph::serializedSize() const
 {
     uint64_t size = sizeof(int32_t);
@@ -317,5 +320,6 @@ flatbuffers::Offset<Serialized::VisibilityGraph> ProbeVisibilityGraph::serialize
 
     return Serialized::CreateVisibilityGraph(fbb, visibilityListsOffset);
 }
+#endif
 
 }

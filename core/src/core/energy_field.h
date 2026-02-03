@@ -17,9 +17,10 @@
 #pragma once
 
 #include "array.h"
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "serialized_object.h"
-
 #include "energy_field.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -35,7 +36,9 @@ public:
     EnergyField(float duration,
                 int order);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     EnergyField(const Serialized::EnergyField* serializedObject);
+#endif
 
     virtual ~EnergyField()
     {}
@@ -82,9 +85,11 @@ public:
 
     virtual void reset();
 
+#ifdef IPL_ENABLE_SERIALIZATION
     uint64_t serializedSize() const;
 
     flatbuffers::Offset<Serialized::EnergyField> serialize(SerializedObject& serializedObject) const;
+#endif
 
     void copyFrom(const EnergyField& other);
 

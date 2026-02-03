@@ -57,8 +57,10 @@ public:
                                                   IPLVector3 listenerAhead,
                                                   IPLVector3 listenerUp) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror createSerializedObject(IPLSerializedObjectSettings* settings,
                                             ISerializedObject** serializedObject) override;
+#endif
 
     virtual IPLerror createEmbreeDevice(IPLEmbreeDeviceSettings* settings,
                                         IEmbreeDevice** device) override;
@@ -77,11 +79,13 @@ public:
     virtual IPLerror createScene(IPLSceneSettings* settings,
                                  IScene** scene) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadScene(IPLSceneSettings* settings,
                                ISerializedObject* serializedObject,
                                IPLProgressCallback progressCallback,
                                void* userData,
                                IScene** scene) override;
+#endif
 
     virtual IPLerror allocateAudioBuffer(IPLint32 numChannels,
                                          IPLint32 numSamples,
@@ -162,8 +166,10 @@ public:
 
     virtual IPLerror createProbeBatch(IProbeBatch** probeBatch) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadProbeBatch(ISerializedObject* serializedObject,
                                     IProbeBatch** probeBatch) override;
+#endif
 
     virtual void bakeReflections(IPLReflectionsBakeParams* params,
                                  IPLProgressCallback progressCallback,

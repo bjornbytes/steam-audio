@@ -20,7 +20,9 @@
 #include "probe_batch.h"
 #include "scene.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "path_visibility.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -90,8 +92,10 @@ public:
                          ProgressCallback progressCallback = nullptr,
                          void* callbackUserData = nullptr);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     // Deserializes a visibility graph.
     ProbeVisibilityGraph(const Serialized::VisibilityGraph* serializedObject);
+#endif
 
     void updateCosts(const ProbeBatch& probeBatch);
 
@@ -105,11 +109,13 @@ public:
                const ProbeVisibilityTester& visTester,
                float visRange);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     // Returns the size of a serialized representation of this object.
     uint64_t serializedSize() const;
 
     // Serializes this object.
     flatbuffers::Offset<Serialized::VisibilityGraph> serialize(SerializedObject& serializedObject) const;
+#endif
 
 private:
     std::atomic<int> mNumJobsRemaining;

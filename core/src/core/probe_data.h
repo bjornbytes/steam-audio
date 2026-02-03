@@ -17,7 +17,6 @@
 #pragma once
 
 #include "probe.h"
-#include "serialized_object.h"
 #include "sphere.h"
 
 namespace ipl {

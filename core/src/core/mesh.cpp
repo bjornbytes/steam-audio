@@ -45,6 +45,7 @@ Mesh::Mesh(int numVertices,
     calcNormals();
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 Mesh::Mesh(const Serialized::Mesh* serializedObject)
 {
     assert(serializedObject);
@@ -84,6 +85,7 @@ flatbuffers::Offset<Serialized::Mesh> Mesh::serialize(SerializedObject& serializ
 
     return Serialized::CreateMesh(fbb, verticesOffset, trianglesOffset);
 }
+#endif
 
 void Mesh::calcNormals()
 {

@@ -49,6 +49,7 @@ BakedReflectionsData::BakedReflectionsData(const BakedDataIdentifier& identifier
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 BakedReflectionsData::BakedReflectionsData(const BakedDataIdentifier& identifier,
                                            int numProbes,
                                            const Serialized::BakedReflectionsData* serializedObject)
@@ -89,6 +90,7 @@ BakedReflectionsData::BakedReflectionsData(const BakedDataIdentifier& identifier
         memcpy(mReverbs.data(), serializedObject->reverbs()->data(), serializedObject->reverbs()->size() * sizeof(Reverb));
     }
 }
+#endif
 
 void BakedReflectionsData::updateProbePosition(int index,
                                                const Vector3f& position)
@@ -167,6 +169,7 @@ void BakedReflectionsData::updateEndpoint(const BakedDataIdentifier& identifier,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 uint64_t BakedReflectionsData::serializedSize() const
 {
     uint64_t size = (mNeedsUpdate.size() * sizeof(uint8_t) +
@@ -201,6 +204,7 @@ uint64_t BakedReflectionsData::serializedSize() const
 
     return size;
 }
+#endif
 
 void BakedReflectionsData::evaluateEnergyField(const ProbeNeighborhood& neighborhood, EnergyField& energyField)
 {
@@ -241,6 +245,7 @@ void BakedReflectionsData::evaluateReverb(const ProbeNeighborhood& neighborhood,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 flatbuffers::Offset<Serialized::BakedReflectionsData> BakedReflectionsData::serialize(SerializedObject& serializedObject) const
 {
     auto& fbb = serializedObject.fbb();
@@ -269,6 +274,7 @@ flatbuffers::Offset<Serialized::BakedReflectionsData> BakedReflectionsData::seri
 
     return Serialized::CreateBakedReflectionsData(fbb, energyFieldsOffset, reverbsOffset, needsUpdateOffset);
 }
+#endif
 
 int BakedReflectionsData::numProbes() const
 {

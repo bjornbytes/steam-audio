@@ -21,7 +21,9 @@
 #include "material.h"
 #include "static_mesh.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "scene.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -50,7 +52,9 @@ public:
                                                      const int* materialIndices,
                                                      const Material* materials) = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual shared_ptr<IStaticMesh> createStaticMesh(SerializedObject& serializedObject) = 0;
+#endif
 
     virtual shared_ptr<IInstancedMesh> createInstancedMesh(shared_ptr<IScene> subScene,
                                                            const Matrix4x4f& transform) = 0;
@@ -108,9 +112,11 @@ class Scene : public IScene
 public:
     Scene();
 
+#ifdef IPL_ENABLE_SERIALIZATION
     Scene(const Serialized::Scene* serializedObject);
 
     Scene(SerializedObject& serializedObject);
+#endif
 
     virtual int numStaticMeshes() const override
     {
@@ -140,7 +146,9 @@ public:
                                                      const int* materialIndices,
                                                      const Material* materials) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual shared_ptr<IStaticMesh> createStaticMesh(SerializedObject& serializedObject) override;
+#endif
 
     virtual shared_ptr<IInstancedMesh> createInstancedMesh(shared_ptr<IScene> subScene,
                                                            const Matrix4x4f& transform) override;
@@ -186,9 +194,11 @@ public:
 
     bool intersectsBox(const Box& box) const;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     flatbuffers::Offset<Serialized::Scene> serialize(SerializedObject& serializedObject) const;
 
     void serializeAsRoot(SerializedObject& serializedObject) const;
+#endif
 
 private:
     list<shared_ptr<IStaticMesh>> mStaticMeshes[2];

@@ -22,7 +22,9 @@
 #include "reflection_simulator.h"
 #include "reverb_estimator.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "baked_reflection_data.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -51,9 +53,11 @@ public:
                          bool hasConvolution,
                          bool hasParametric);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     BakedReflectionsData(const BakedDataIdentifier& identifier,
                          int numProbes,
                          const Serialized::BakedReflectionsData* serializedObject);
+#endif
 
     virtual void updateProbePosition(int index,
                                      const Vector3f& position) override;
@@ -72,7 +76,9 @@ public:
 
     virtual void evaluateReverb(const ProbeNeighborhood& neighborhood, Reverb& reverb) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     flatbuffers::Offset<Serialized::BakedReflectionsData> serialize(SerializedObject& serializedObject) const;
+#endif
 
     int numProbes() const;
 

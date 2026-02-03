@@ -18,7 +18,9 @@
 
 #include "bvh.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "static_mesh.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -58,9 +60,11 @@ public:
                const int* materialIndices,
                const Material* materials);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     StaticMesh(const Serialized::StaticMesh* serializedObject);
 
     StaticMesh(SerializedObject& serializedObject);
+#endif
 
     virtual int numVertices() const override
     {
@@ -128,9 +132,11 @@ public:
 
     bool intersectsBox(const Box& box) const;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     flatbuffers::Offset<Serialized::StaticMesh> serialize(SerializedObject& serializedObject) const;
 
     void serializeAsRoot(SerializedObject& serializedObject) const;
+#endif
 
 private:
     Mesh mMesh;

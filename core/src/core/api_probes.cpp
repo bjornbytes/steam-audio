@@ -25,7 +25,9 @@ using namespace ipl;
 #define STEAMAUDIO_SKIP_API_FUNCTIONS
 #include "phonon_interfaces.h"
 #include "api_context.h"
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "api_serialized_object.h"
+#endif
 #include "api_scene.h"
 #include "api_probes.h"
 #include "api_energy_field.h"
@@ -145,6 +147,7 @@ CProbeBatch::CProbeBatch(CContext* context)
     new (&mHandle) Handle<ProbeBatch>(ipl::make_shared<ProbeBatch>(), _context);
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 CProbeBatch::CProbeBatch(CContext* context,
                          ISerializedObject* serializedObject)
 {
@@ -158,6 +161,7 @@ CProbeBatch::CProbeBatch(CContext* context,
 
     new (&mHandle) Handle<ProbeBatch>(ipl::make_shared<ProbeBatch>(*_serializedObject), _context);
 }
+#endif
 
 IProbeBatch* CProbeBatch::retain()
 {
@@ -174,6 +178,7 @@ void CProbeBatch::release()
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 void CProbeBatch::save(ISerializedObject* serializedObject)
 {
     if (!serializedObject)
@@ -186,6 +191,7 @@ void CProbeBatch::save(ISerializedObject* serializedObject)
 
     _probeBatch->serializeAsRoot(*_serializedObject);
 }
+#endif
 
 IPLint32 CProbeBatch::getNumProbes()
 {
@@ -363,6 +369,7 @@ IPLerror CContext::createProbeBatch(IProbeBatch** probeBatch)
     return IPL_STATUS_SUCCESS;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror CContext::loadProbeBatch(ISerializedObject* serializedObject,
                                   IProbeBatch** probeBatch)
 {
@@ -382,5 +389,6 @@ IPLerror CContext::loadProbeBatch(ISerializedObject* serializedObject,
 
     return IPL_STATUS_SUCCESS;
 }
+#endif
 
 }

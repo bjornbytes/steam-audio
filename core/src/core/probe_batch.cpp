@@ -25,6 +25,7 @@ namespace ipl {
 // ProbeBatch
 // ---------------------------------------------------------------------------------------------------------------------
 
+#ifdef IPL_ENABLE_SERIALIZATION
 ProbeBatch::ProbeBatch(const Serialized::ProbeBatch* serializedObject)
 {
     assert(serializedObject);
@@ -63,6 +64,7 @@ ProbeBatch::ProbeBatch(const Serialized::ProbeBatch* serializedObject)
 ProbeBatch::ProbeBatch(SerializedObject& serializedObject)
     : ProbeBatch(Serialized::GetProbeBatch(serializedObject.data()))
 {}
+#endif
 
 void ProbeBatch::toProbeArray(ProbeArray& probeArray) const
 {
@@ -157,6 +159,7 @@ void ProbeBatch::getInfluencingProbes(const Vector3f& point,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 flatbuffers::Offset<Serialized::ProbeBatch> ProbeBatch::serialize(SerializedObject& serializedObject) const
 {
     auto& fbb = serializedObject.fbb();
@@ -204,5 +207,6 @@ void ProbeBatch::serializeAsRoot(SerializedObject& serializedObject) const
     serializedObject.fbb().Finish(serialize(serializedObject));
     serializedObject.commit();
 }
+#endif
 
 }

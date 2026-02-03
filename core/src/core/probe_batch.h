@@ -20,7 +20,9 @@
 #include "probe_generator.h"
 #include "probe_tree.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "probe_batch.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -101,9 +103,11 @@ public:
     ProbeBatch()
     {}
 
+#ifdef IPL_ENABLE_SERIALIZATION
     ProbeBatch(const Serialized::ProbeBatch* serializedObject);
 
     ProbeBatch(SerializedObject& serializedObject);
+#endif
 
     virtual int numProbes() const
     {
@@ -183,9 +187,11 @@ public:
                                       ProbeNeighborhood& neighborhood,
                                       int offset = 0);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     flatbuffers::Offset<Serialized::ProbeBatch> serialize(SerializedObject& serializedObject) const;
 
     void serializeAsRoot(SerializedObject& serializedObject) const;
+#endif
 
 protected:
     vector<Probe> mProbes;

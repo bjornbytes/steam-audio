@@ -37,6 +37,7 @@ EnergyField::EnergyField(float duration,
     reset();
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 EnergyField::EnergyField(const Serialized::EnergyField* serializedObject)
 {
     assert(serializedObject);
@@ -51,12 +52,14 @@ EnergyField::EnergyField(const Serialized::EnergyField* serializedObject)
 
     memcpy(mData.flatData(), serializedObject->data()->data(), mData.totalSize() * sizeof(float));
 }
+#endif
 
 void EnergyField::reset()
 {
     mData.zero();
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 uint64_t EnergyField::serializedSize() const
 {
     return (2 * sizeof(int32_t) +
@@ -71,6 +74,7 @@ flatbuffers::Offset<Serialized::EnergyField> EnergyField::serialize(SerializedOb
 
     return Serialized::CreateEnergyField(fbb, numChannels(), numBins(), dataOffset);
 }
+#endif
 
 void EnergyField::copyFrom(const EnergyField& other)
 {

@@ -376,6 +376,7 @@ BakedPathData::BakedPathData(const IScene& scene,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 BakedPathData::BakedPathData(const Serialized::BakedPathingData* serializedObject)
 {
     assert(serializedObject);
@@ -427,6 +428,7 @@ BakedPathData::BakedPathData(const Serialized::BakedPathingData* serializedObjec
         mBakedPathRefs.flatData()[index].index = serializedObject->paths()->Get(i);
     }
 }
+#endif
 
 SoundPath BakedPathData::lookupShortestPath(int start,
                                             int end,
@@ -497,6 +499,7 @@ void BakedPathData::reconstructProbePath(int start,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 uint64_t BakedPathData::serializedSize() const
 {
     // # probes
@@ -584,6 +587,7 @@ flatbuffers::Offset<Serialized::BakedPathingData> BakedPathData::serialize(Seria
 
     return Serialized::CreateBakedPathingData(fbb, visGraphOffset, soundPathsOffset, pathIndicesOffset, pathsOffset);
 }
+#endif
 
 void BakedPathData::updateVisGraphCosts(const ProbeBatch& probeBatch)
 {

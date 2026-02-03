@@ -107,7 +107,7 @@
 
 #include <mysofa.h>
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && defined(IPL_ENABLE_SERIALIZATION)
 #include <flatbuffers/flatbuffers.h>
 #endif
 

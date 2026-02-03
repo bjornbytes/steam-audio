@@ -42,6 +42,7 @@ Scene::Scene()
     , mVersion(0)
 {}
 
+#ifdef IPL_ENABLE_SERIALIZATION
 Scene::Scene(const Serialized::Scene* serializedObject)
     : mHasChanged(false)
     , mVersion(0)
@@ -63,6 +64,7 @@ Scene::Scene(const Serialized::Scene* serializedObject)
 Scene::Scene(SerializedObject& serializedObject)
     : Scene(Serialized::GetScene(serializedObject.data()))
 {}
+#endif
 
 shared_ptr<IStaticMesh> Scene::createStaticMesh(int numVertices,
                                                 int numTriangles,
@@ -78,11 +80,13 @@ shared_ptr<IStaticMesh> Scene::createStaticMesh(int numVertices,
     return std::static_pointer_cast<IStaticMesh>(staticMesh);
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 shared_ptr<IStaticMesh> Scene::createStaticMesh(SerializedObject& serializedObject)
 {
     auto staticMesh = ipl::make_shared<StaticMesh>(serializedObject);
     return std::static_pointer_cast<IStaticMesh>(staticMesh);
 }
+#endif
 
 shared_ptr<IInstancedMesh> Scene::createInstancedMesh(shared_ptr<IScene> subScene,
                                                       const Matrix4x4f& transform)
@@ -258,6 +262,7 @@ bool Scene::intersectsBox(const Box& box) const
     return false;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 flatbuffers::Offset<Serialized::Scene> Scene::serialize(SerializedObject& serializedObject) const
 {
     auto& fbb = serializedObject.fbb();
@@ -278,6 +283,7 @@ void Scene::serializeAsRoot(SerializedObject& serializedObject) const
     serializedObject.fbb().Finish(serialize(serializedObject));
     serializedObject.commit();
 }
+#endif
 
 void Scene::dumpObj(const string& fileName) const
 {

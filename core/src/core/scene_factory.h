@@ -46,10 +46,12 @@ namespace SceneFactory
                               shared_ptr<EmbreeDevice> embree,
                               shared_ptr<RadeonRaysDevice> radeonRays);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     unique_ptr<IScene> create(SceneType type,
                               shared_ptr<EmbreeDevice> embree,
                               shared_ptr<RadeonRaysDevice> radeonRays,
                               SerializedObject& serializedObject);
+#endif
 }
 
 }

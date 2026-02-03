@@ -20,7 +20,9 @@
 #include "path_finder.h"
 #include "probe_data.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "path_data.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -139,8 +141,10 @@ public:
                   ProgressCallback progressCallback = nullptr,
                   void* callbackUserData = nullptr);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     // Loads baked data from a serialized object.
     BakedPathData(const Serialized::BakedPathingData* serializedObject);
+#endif
 
     virtual void updateProbePosition(int index,
                                      const Vector3f& position) override
@@ -182,8 +186,10 @@ public:
     // Returns the size (in bytes) of the baked data.
     virtual uint64_t serializedSize() const override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     // Saves the baked data to a serialized object.
     flatbuffers::Offset<Serialized::BakedPathingData> serialize(SerializedObject& serializedObject) const;
+#endif
 
     void updateVisGraphCosts(const ProbeBatch& probeBatch);
 

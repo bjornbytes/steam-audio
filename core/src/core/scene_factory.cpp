@@ -58,6 +58,7 @@ unique_ptr<IScene> SceneFactory::create(SceneType type,
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 unique_ptr<IScene> SceneFactory::create(SceneType type,
                                         shared_ptr<EmbreeDevice> embree,
                                         shared_ptr<RadeonRaysDevice> radeonRays,
@@ -82,5 +83,6 @@ unique_ptr<IScene> SceneFactory::create(SceneType type,
         throw Exception(Status::Initialization);
     }
 }
+#endif
 
 }

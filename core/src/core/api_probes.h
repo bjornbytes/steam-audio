@@ -26,7 +26,9 @@ using namespace ipl;
 #define STEAMAUDIO_SKIP_API_FUNCTIONS
 #include "phonon_interfaces.h"
 #include "api_context.h"
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "api_serialized_object.h"
+#endif
 #include "api_scene.h"
 
 namespace api {
@@ -73,14 +75,18 @@ public:
 
     CProbeBatch(CContext* context);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     CProbeBatch(CContext* context,
                 ISerializedObject* serializedObject);
+#endif
 
     virtual IProbeBatch* retain() override;
 
     virtual void release() override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual void save(ISerializedObject* serializedObject) override;
+#endif
 
     virtual IPLint32 getNumProbes() override;
 

@@ -66,8 +66,10 @@ public:
                                                   IPLVector3 listenerAhead,
                                                   IPLVector3 listenerUp) = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror createSerializedObject(IPLSerializedObjectSettings* settings,
                                             ISerializedObject** serializedObject) = 0;
+#endif
 
     virtual IPLerror createEmbreeDevice(IPLEmbreeDeviceSettings* settings,
                                         IEmbreeDevice** device) = 0;
@@ -86,11 +88,13 @@ public:
     virtual IPLerror createScene(IPLSceneSettings* settings,
                                  IScene** scene) = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadScene(IPLSceneSettings* settings,
                                ISerializedObject* serializedObject,
                                IPLProgressCallback progressCallback,
                                void* userData,
                                IScene** scene) = 0;
+#endif
 
     virtual IPLerror allocateAudioBuffer(IPLint32 numChannels,
                                          IPLint32 numSamples,
@@ -171,8 +175,10 @@ public:
 
     virtual IPLerror createProbeBatch(IProbeBatch** probeBatch) = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadProbeBatch(ISerializedObject* serializedObject,
                                     IProbeBatch** probeBatch) = 0;
+#endif
 
     virtual void bakeReflections(IPLReflectionsBakeParams* params,
                                  IPLProgressCallback progressCallback,
@@ -212,6 +218,7 @@ public:
                                          IReconstructor** reconstructor) = 0;
 };
 
+#ifdef IPL_ENABLE_SERIALIZATION
 class ISerializedObject
 {
 public:
@@ -223,6 +230,7 @@ public:
 
     virtual IPLbyte* getData() = 0;
 };
+#endif
 
 class IEmbreeDevice
 {
@@ -284,7 +292,9 @@ public:
 
     virtual void release() = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual void save(ISerializedObject* serializedObject) = 0;
+#endif
 
     virtual void saveOBJ(IPLstring fileBaseName) = 0;
 
@@ -293,10 +303,12 @@ public:
     virtual IPLerror createStaticMesh(IPLStaticMeshSettings* settings,
                                       IStaticMesh** staticMesh) = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadStaticMesh(ISerializedObject* serializedObject,
                                     IPLProgressCallback progressCallback,
                                     void* userData,
                                     IStaticMesh** staticMesh) = 0;
+#endif
 
     virtual IPLerror createInstancedMesh(IPLInstancedMeshSettings* settings,
                                          IInstancedMesh** instancedMesh) = 0;
@@ -311,7 +323,9 @@ public:
 
     virtual void release() = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual void save(ISerializedObject* serializedObject) = 0;
+#endif
 
     virtual void add(IScene* scene) = 0;
 
@@ -576,7 +590,9 @@ public:
 
     virtual void release() = 0;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual void save(ISerializedObject* serializedObject) = 0;
+#endif
 
     virtual IPLint32 getNumProbes() = 0;
 
@@ -754,6 +770,7 @@ IPLVector3 IPLCALL iplCalculateRelativeDirection(IPLContext context,
     return reinterpret_cast<api::IContext*>(context)->calculateRelativeDirection(sourcePosition, listenerPosition, listenerAhead, listenerUp);
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror IPLCALL iplSerializedObjectCreate(IPLContext context,
                                    IPLSerializedObjectSettings* settings,
                                    IPLSerializedObject* serializedObject)
@@ -797,6 +814,7 @@ IPLbyte* IPLCALL iplSerializedObjectGetData(IPLSerializedObject serializedObject
 
     return reinterpret_cast<api::ISerializedObject*>(serializedObject)->getData();
 }
+#endif
 
 IPLerror IPLCALL iplEmbreeDeviceCreate(IPLContext context,
                                IPLEmbreeDeviceSettings* settings,
@@ -996,6 +1014,7 @@ void IPLCALL iplSceneRelease(IPLScene* scene)
     *scene = nullptr;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror IPLCALL iplSceneLoad(IPLContext context,
                       IPLSceneSettings* settings,
                       IPLSerializedObject serializedObject,
@@ -1019,6 +1038,7 @@ void IPLCALL iplSceneSave(IPLScene scene,
 
     reinterpret_cast<api::IScene*>(scene)->save(reinterpret_cast<api::ISerializedObject*>(serializedObject));
 }
+#endif
 
 void IPLCALL iplSceneSaveOBJ(IPLScene scene,
                      IPLstring fileBaseName)
@@ -1065,6 +1085,7 @@ void IPLCALL iplStaticMeshRelease(IPLStaticMesh* staticMesh)
     *staticMesh = nullptr;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror IPLCALL iplStaticMeshLoad(IPLScene scene,
                            IPLSerializedObject serializedObject,
                            IPLProgressCallback progressCallback,
@@ -1087,6 +1108,7 @@ void IPLCALL iplStaticMeshSave(IPLStaticMesh staticMesh,
 
     reinterpret_cast<api::IStaticMesh*>(staticMesh)->save(reinterpret_cast<api::ISerializedObject*>(serializedObject));
 }
+#endif
 
 void IPLCALL iplStaticMeshAdd(IPLStaticMesh staticMesh, IPLScene scene)
 {
@@ -2141,6 +2163,7 @@ void IPLCALL iplProbeBatchRelease(IPLProbeBatch* probeBatch)
     *probeBatch = nullptr;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror IPLCALL iplProbeBatchLoad(IPLContext context,
                            IPLSerializedObject serializedObject,
                            IPLProbeBatch* probeBatch)
@@ -2159,6 +2182,7 @@ void IPLCALL iplProbeBatchSave(IPLProbeBatch probeBatch,
 
     reinterpret_cast<api::IProbeBatch*>(probeBatch)->save(reinterpret_cast<api::ISerializedObject*>(serializedObject));
 }
+#endif
 
 IPLint32 IPLCALL iplProbeBatchGetNumProbes(IPLProbeBatch probeBatch)
 {

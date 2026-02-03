@@ -40,6 +40,7 @@ StaticMesh::StaticMesh(int numVertices,
     memcpy(mMaterialsToUpdate.data(), materials, numMaterials * sizeof(Material));
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 StaticMesh::StaticMesh(const Serialized::StaticMesh* serializedObject)
     : mMesh(serializedObject->mesh())
     , mBVH(mMesh)
@@ -121,6 +122,7 @@ void StaticMesh::serializeAsRoot(SerializedObject& serializedObject) const
     serializedObject.fbb().Finish(serialize(serializedObject));
     serializedObject.commit();
 }
+#endif
 
 Hit StaticMesh::closestHit(const Ray& ray,
                            float minDistance,

@@ -26,43 +26,45 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.rc.in ${CMAKE_CURRENT_BINARY_D
 # FLATBUFFERS
 #
 
-function (compile_fbs FBS_SOURCE)
-    set(FBS_OUTPUT ${FBS_SOURCE}.h)
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    function (compile_fbs FBS_SOURCE)
+        set(FBS_OUTPUT ${FBS_SOURCE}.h)
 
-    set(FlatBuffers_FLAGS --cpp --scoped-enums --filename-suffix .fbs)
+        set(FlatBuffers_FLAGS --cpp --scoped-enums --filename-suffix .fbs)
 
-    add_custom_command(
-        OUTPUT      ${CMAKE_CURRENT_BINARY_DIR}/${FBS_OUTPUT}
-        DEPENDS     ${CMAKE_CURRENT_SOURCE_DIR}/${FBS_SOURCE}
-        COMMAND     ${FlatBuffers_EXECUTABLE} ${FlatBuffers_FLAGS} -o ${CMAKE_CURRENT_BINARY_DIR}/ ${CMAKE_CURRENT_SOURCE_DIR}/${FBS_SOURCE}
-        COMMENT     "Compiling FlatBuffers schema ${FBS_SOURCE}..."
-        VERBATIM
+        add_custom_command(
+            OUTPUT      ${CMAKE_CURRENT_BINARY_DIR}/${FBS_OUTPUT}
+            DEPENDS     ${CMAKE_CURRENT_SOURCE_DIR}/${FBS_SOURCE}
+            COMMAND     ${FlatBuffers_EXECUTABLE} ${FlatBuffers_FLAGS} -o ${CMAKE_CURRENT_BINARY_DIR}/ ${CMAKE_CURRENT_SOURCE_DIR}/${FBS_SOURCE}
+            COMMENT     "Compiling FlatBuffers schema ${FBS_SOURCE}..."
+            VERBATIM
+        )
+    endfunction()
+
+    set(FBS_SOURCES
+        vector.fbs
+        sphere.fbs
+        triangle.fbs
+        mesh.fbs
+        material.fbs
+        static_mesh.fbs
+        scene.fbs
+        energy_field.fbs
+        reverb.fbs
+        baked_reflection_data.fbs
+        path_visibility.fbs
+        path_data.fbs
+        probe_batch.fbs
     )
-endfunction()
 
-set(FBS_SOURCES
-    vector.fbs
-    sphere.fbs
-    triangle.fbs
-    mesh.fbs
-    material.fbs
-    static_mesh.fbs
-    scene.fbs
-    energy_field.fbs
-    reverb.fbs
-    baked_reflection_data.fbs
-    path_visibility.fbs
-    path_data.fbs
-    probe_batch.fbs
-)
+    foreach (FBS_FILE IN LISTS FBS_SOURCES)
+        compile_fbs(${FBS_FILE})
+        list(APPEND FBS_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/${FBS_FILE}.h)
+    endforeach ()
 
-foreach (FBS_FILE IN LISTS FBS_SOURCES)
-    compile_fbs(${FBS_FILE})
-    list(APPEND FBS_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/${FBS_FILE}.h)
-endforeach ()
-
-add_custom_target(fbschemas DEPENDS ${FBS_OUTPUTS})
-set_source_files_properties(${FBS_OUTPUTS} PROPERTIES GENERATED TRUE)
+    add_custom_target(fbschemas DEPENDS ${FBS_OUTPUTS})
+    set_source_files_properties(${FBS_OUTPUTS} PROPERTIES GENERATED TRUE)
+endif()
 
 
 #
@@ -202,8 +204,6 @@ add_library(core OBJECT
     containers.h
     stack.h
     triple_buffer.h
-    serialized_object.h
-    serialized_object.cpp
 
     float4.h
     sse_float4.h
@@ -406,8 +406,6 @@ add_library(core OBJECT
     api_context.h
     api_context.cpp
     api_geometry.cpp
-    api_serialized_object.h
-    api_serialized_object.cpp
     api_embree_device.h
     api_embree_device.cpp
     api_opencl_device.h
@@ -589,6 +587,15 @@ if (STEAMAUDIO_BUILD_CSHARP_BINDINGS)
     set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/phonon_csharp_wrap.cxx PROPERTIES GENERATED TRUE)
 endif()
 
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    target_sources(core PRIVATE
+        serialized_object.h
+        serialized_object.cpp
+        api_serialized_object.h
+        api_serialized_object.cpp
+    )
+endif()
+
 # This is needed so we can include generated headers
 target_include_directories(core PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -604,7 +611,9 @@ if (IPL_OS_LINUX)
     target_link_libraries(core PUBLIC -Wl,--start-group)
 endif()
 
-target_link_libraries(core PUBLIC FlatBuffers::FlatBuffers)
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    target_link_libraries(core PUBLIC FlatBuffers::FlatBuffers)
+endif()
 
 if (STEAMAUDIO_ENABLE_IPP AND (IPL_OS_WINDOWS OR IPL_OS_LINUX OR IPL_OS_MACOS))
     target_link_libraries(core PUBLIC IPP::IPP)
@@ -622,7 +631,10 @@ elseif (FFT_LIBRARY STREQUAL "PFFFT")
 endif()
 
 target_link_libraries(core PUBLIC MySOFA::MySOFA)
-add_dependencies(core fbschemas)
+
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    add_dependencies(core fbschemas)
+endif()
 
 if (STEAMAUDIO_ENABLE_EMBREE)
     target_link_libraries(core PUBLIC Embree::Embree ispckernels)
@@ -641,7 +653,9 @@ if (IPL_OS_LINUX)
     target_link_libraries(core PUBLIC -Wl,--end-group)
 endif()
 
-source_group("FlatBuffers Schema Files" FILES ${FBS_SOURCES})
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    source_group("FlatBuffers Schema Files" FILES ${FBS_SOURCES})
+endif()
 source_group("ISPC Files" FILES ${ISPC_SOURCE})
 source_group("OpenCL Files" FILES ${CL_SOURCE})
 

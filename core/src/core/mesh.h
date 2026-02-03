@@ -17,10 +17,14 @@
 #pragma once
 
 #include "array.h"
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "serialized_object.h"
+#endif
 #include "triangle.h"
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "mesh.fbs.h"
+#endif
 
 namespace ipl {
 
@@ -38,7 +42,9 @@ public:
          const Vector3f* vertices,
          const Triangle* triangleIndices);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     Mesh(const Serialized::Mesh* serializedObject);
+#endif
 
     int numVertices() const
     {
@@ -112,7 +118,9 @@ public:
         return mNormals[i];
     }
 
+#ifdef IPL_ENABLE_SERIALIZATION
     flatbuffers::Offset<Serialized::Mesh> serialize(SerializedObject& serializedObject) const;
+#endif
 
 private:
     Array<Vector4f> mVertices;

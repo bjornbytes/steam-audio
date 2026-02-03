@@ -81,10 +81,12 @@ public:
         return nullptr;
     }
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual shared_ptr<IStaticMesh> createStaticMesh(SerializedObject& serializedObject) override
     {
         return nullptr;
     }
+#endif
 
     virtual shared_ptr<IInstancedMesh> createInstancedMesh(shared_ptr<IScene> subScene,
                                                            const Matrix4x4f& transform) override

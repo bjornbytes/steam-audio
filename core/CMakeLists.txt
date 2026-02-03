@@ -90,6 +90,9 @@ option(STEAMAUDIO_BUILD_TESTS "Build unit tests." ON)
 option(STEAMAUDIO_BUILD_BENCHMARKS "Build benchmarks." ON)
 option(STEAMAUDIO_BUILD_SAMPLES "Build samples." ON)
 
+# Whether to enable serialization support
+option(STEAMAUDIO_ENABLE_SERIALIZATION "Enable serialization support." ON)
+
 if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     option(STEAMAUDIO_BUILD_ITESTS "Build interactive tests." ON)
     option(STEAMAUDIO_BUILD_DOCS "Build documentation." ON)
@@ -248,7 +251,10 @@ if (STEAMAUDIO_ENABLE_MKL)
 endif()
 
 find_package(MySOFA REQUIRED)
-find_package(FlatBuffers REQUIRED)
+
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    find_package(FlatBuffers REQUIRED)
+endif()
 
 if (STEAMAUDIO_ENABLE_EMBREE)
     find_package(ISPC 1.12 EXACT)
@@ -359,6 +365,10 @@ if (STEAMAUDIO_ENABLE_OCTAVE_BANDS)
     add_definitions(-DIPL_ENABLE_OCTAVE_BANDS)
 endif()
 
+if (STEAMAUDIO_ENABLE_SERIALIZATION)
+    add_definitions(-DIPL_ENABLE_SERIALIZATION)
+endif()
+
 
 #
 # TARGETS
@@ -367,6 +377,9 @@ endif()
 add_subdirectory(src/core)
 
 if (STEAMAUDIO_BUILD_TESTS)
+    if (NOT STEAMAUDIO_ENABLE_SERIALIZATION)
+        message(FATAL_ERROR "Tests require serialization")
+    endif()
     enable_testing()
     add_subdirectory(src/test)
 endif()
@@ -376,10 +389,16 @@ if (STEAMAUDIO_BUILD_ITESTS)
 endif()
 
 if (STEAMAUDIO_BUILD_BENCHMARKS)
+    if (NOT STEAMAUDIO_ENABLE_SERIALIZATION)
+        message(FATAL_ERROR "Benchmarks require serialization")
+    endif()
     add_subdirectory(src/benchmark)
 endif()
 
 if (STEAMAUDIO_BUILD_SAMPLES)
+    if (NOT STEAMAUDIO_ENABLE_SERIALIZATION)
+        message(FATAL_ERROR "Samples require serialization")
+    endif()
     add_subdirectory(src/samples)
 endif()
 

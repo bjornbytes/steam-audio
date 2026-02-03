@@ -30,7 +30,9 @@ using namespace ipl;
 #define STEAMAUDIO_SKIP_API_FUNCTIONS
 #include "phonon_interfaces.h"
 #include "api_context.h"
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "api_serialized_object.h"
+#endif
 #include "api_embree_device.h"
 #include "api_radeonrays_device.h"
 #include "api_scene.h"
@@ -59,6 +61,7 @@ CScene::CScene(CContext* context,
     new (&mHandle) Handle<ipl::IScene>(shared_ptr<ipl::IScene>(SceneFactory::create(_sceneType, _closestHitCallback, _anyHitCallback, _batchedClosestHitCallback, _batchedAnyHitCallback, settings->userData, _embree, _radeonRays)), _context);
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 CScene::CScene(CContext* context,
                IPLSceneSettings* settings,
                ISerializedObject* serializedObject)
@@ -77,6 +80,7 @@ CScene::CScene(CContext* context,
 
     new (&mHandle) Handle<ipl::IScene>(shared_ptr<ipl::IScene>(SceneFactory::create(_sceneType, _embree, _radeonRays, *_serializedObject)), _context);
 }
+#endif
 
 IScene* CScene::retain()
 {
@@ -93,6 +97,7 @@ void CScene::release()
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 void CScene::save(ISerializedObject* serializedObject)
 {
     if (!serializedObject)
@@ -105,6 +110,7 @@ void CScene::save(ISerializedObject* serializedObject)
 
     static_cast<Scene*>(_scene.get())->serializeAsRoot(*_serializedObject);
 }
+#endif
 
 void CScene::saveOBJ(IPLstring fileBaseName)
 {
@@ -150,6 +156,7 @@ IPLerror CScene::createStaticMesh(IPLStaticMeshSettings* settings,
     return IPL_STATUS_SUCCESS;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror CScene::loadStaticMesh(ISerializedObject* serializedObject,
                                 IPLProgressCallback progressCallback,
                                 void* userData,
@@ -171,6 +178,7 @@ IPLerror CScene::loadStaticMesh(ISerializedObject* serializedObject,
 
     return IPL_STATUS_SUCCESS;
 }
+#endif
 
 IPLerror CScene::createInstancedMesh(IPLInstancedMeshSettings* settings,
                                      IInstancedMesh** instancedMesh)
@@ -233,6 +241,7 @@ CStaticMesh::CStaticMesh(CScene* scene,
         settings->materialIndices, _materials), _context);
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 CStaticMesh::CStaticMesh(CScene* scene,
                          ISerializedObject* serializedObject)
 {
@@ -250,6 +259,7 @@ CStaticMesh::CStaticMesh(CScene* scene,
 
     new (&mHandle) Handle<ipl::IStaticMesh>(_scene->createStaticMesh(*_serializedObject), _context);
 }
+#endif
 
 IStaticMesh* CStaticMesh::retain()
 {
@@ -266,6 +276,7 @@ void CStaticMesh::release()
     }
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 void CStaticMesh::save(ISerializedObject* serializedObject)
 {
     if (!serializedObject)
@@ -278,6 +289,7 @@ void CStaticMesh::save(ISerializedObject* serializedObject)
 
     static_cast<StaticMesh*>(_staticMesh.get())->serializeAsRoot(*_serializedObject);
 }
+#endif
 
 void CStaticMesh::add(IScene* scene)
 {
@@ -409,6 +421,7 @@ IPLerror CContext::createScene(IPLSceneSettings* settings,
     return IPL_STATUS_SUCCESS;
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 IPLerror CContext::loadScene(IPLSceneSettings* settings,
                              ISerializedObject* serializedObject,
                              IPLProgressCallback progressCallback,
@@ -431,5 +444,6 @@ IPLerror CContext::loadScene(IPLSceneSettings* settings,
 
     return IPL_STATUS_SUCCESS;
 }
+#endif
 
 }

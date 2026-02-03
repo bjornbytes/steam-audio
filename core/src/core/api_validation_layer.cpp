@@ -20,7 +20,9 @@
 #include "phonon_interfaces.h"
 
 #include "api_context.h"
+#ifdef IPL_ENABLE_SERIALIZATION
 #include "api_serialized_object.h"
+#endif
 #include "api_embree_device.h"
 #include "api_opencl_device.h"
 #include "api_radeonrays_device.h"
@@ -270,12 +272,14 @@ std::string to_string(T* value)
     } \
 }
 
+#ifdef IPL_ENABLE_SERIALIZATION
 #define VALIDATE_IPLSerializedObjectSettings(value) { \
     VALIDATE_POINTER(value); \
     if (value) { \
         VALIDATE(IPLbyte*, value->data, (value->size == 0 || value->data != nullptr)); \
     } \
 }
+#endif
 
 #define VALIDATE_IPLEmbreeDeviceSettings(value) { \
     VALIDATE_POINTER(value); \
@@ -939,6 +943,7 @@ public:
         return result;
     }
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror createSerializedObject(IPLSerializedObjectSettings* settings, ISerializedObject** serializedObject) override
     {
         VALIDATE_IPLSerializedObjectSettings(settings);
@@ -946,6 +951,7 @@ public:
 
         return apiObjectAllocate<CValidatedSerializedObject, CContext, ISerializedObject>(serializedObject, this, settings);
     }
+#endif
 
     virtual IPLerror createEmbreeDevice(IPLEmbreeDeviceSettings* settings, IEmbreeDevice** device) override
     {
@@ -989,6 +995,7 @@ public:
         return apiObjectAllocate<CValidatedScene, CContext, IScene>(scene, this, settings);
     }
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadScene(IPLSceneSettings* settings, ISerializedObject* serializedObject, IPLProgressCallback progressCallback, void* userData, IScene** scene) override
     {
         VALIDATE_IPLSceneSettings(settings);
@@ -997,6 +1004,7 @@ public:
 
         return apiObjectAllocate<CValidatedScene, CContext, IScene>(scene, this, settings, serializedObject);
     }
+#endif
 
     virtual IPLerror allocateAudioBuffer(IPLint32 numChannels, IPLint32 numSamples, IPLAudioBuffer* audioBuffer) override
     {
@@ -1204,6 +1212,7 @@ public:
         return apiObjectAllocate<CValidatedProbeBatch, CContext, IProbeBatch>(probeBatch, this);
     }
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadProbeBatch(ISerializedObject* serializedObject, IProbeBatch** probeBatch) override
     {
         VALIDATE_POINTER(serializedObject);
@@ -1211,6 +1220,7 @@ public:
 
         return apiObjectAllocate<CValidatedProbeBatch, CContext, IProbeBatch>(probeBatch, this, serializedObject);
     }
+#endif
 
     virtual void bakeReflections(IPLReflectionsBakeParams* params, IPLProgressCallback progressCallback, void* userData) override
     {
@@ -1355,6 +1365,7 @@ IPLerror CContext::createContext(IPLContextSettings* settings,
 // CValidatedSerializedObject
 // --------------------------------------------------------------------------------------------------------------------
 
+#ifdef IPL_ENABLE_SERIALIZATION
 class CValidatedSerializedObject : public CSerializedObject
 {
 public:
@@ -1362,6 +1373,7 @@ public:
         : CSerializedObject(context, settings)
     {}
 };
+#endif
 
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -1477,6 +1489,7 @@ public:
         : CScene(context, settings)
     {}
 
+#ifdef IPL_ENABLE_SERIALIZATION
     CValidatedScene(CContext* context, IPLSceneSettings* settings, ISerializedObject* serializedObject)
         : CScene(context, settings, serializedObject)
     {}
@@ -1487,6 +1500,7 @@ public:
 
         CScene::save(serializedObject);
     }
+#endif
 
     virtual void saveOBJ(IPLstring fileBaseName) override
     {
@@ -1503,6 +1517,7 @@ public:
         return apiObjectAllocate<CValidatedStaticMesh, CScene, IStaticMesh>(staticMesh, this, settings);
     }
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadStaticMesh(ISerializedObject* serializedObject, IPLProgressCallback progressCallback, void* userData, IStaticMesh** staticMesh) override
     {
         VALIDATE_POINTER(serializedObject);
@@ -1510,6 +1525,7 @@ public:
 
         return apiObjectAllocate<CValidatedStaticMesh, CScene, IStaticMesh>(staticMesh, this, serializedObject);
     }
+#endif
 
     virtual IPLerror createInstancedMesh(IPLInstancedMeshSettings* settings, IInstancedMesh** instancedMesh) override
     {
@@ -1532,6 +1548,7 @@ public:
         : CStaticMesh(scene, settings)
     {}
 
+#ifdef IPL_ENABLE_SERIALIZATION
     CValidatedStaticMesh(CScene* scene, ISerializedObject* serializedObject)
         : CStaticMesh(scene, serializedObject)
     {}
@@ -1542,6 +1559,7 @@ public:
 
         CStaticMesh::save(serializedObject);
     }
+#endif
 
     virtual void add(IScene* scene) override
     {
@@ -1988,6 +2006,7 @@ public:
         : CProbeBatch(context)
     {}
 
+#ifdef IPL_ENABLE_SERIALIZATION
     CValidatedProbeBatch(CContext* context, ISerializedObject* serializedObject)
         : CProbeBatch(context, serializedObject)
     {}
@@ -1998,6 +2017,7 @@ public:
 
         CProbeBatch::save(serializedObject);
     }
+#endif
 
     virtual IPLint32 getNumProbes() override
     {

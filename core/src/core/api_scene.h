@@ -50,15 +50,19 @@ public:
     CScene(CContext* context,
            IPLSceneSettings* settings);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     CScene(CContext* context,
            IPLSceneSettings* settings,
            ISerializedObject* serializedObject);
+#endif
 
     virtual IScene* retain() override;
 
     virtual void release() override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual void save(ISerializedObject* serializedObject) override;
+#endif
 
     virtual void saveOBJ(IPLstring fileBaseName) override;
 
@@ -67,10 +71,12 @@ public:
     virtual IPLerror createStaticMesh(IPLStaticMeshSettings* settings,
                                       IStaticMesh** staticMesh) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual IPLerror loadStaticMesh(ISerializedObject* serializedObject,
                                     IPLProgressCallback progressCallback,
                                     void* userData,
                                     IStaticMesh** staticMesh) override;
+#endif
 
     virtual IPLerror createInstancedMesh(IPLInstancedMeshSettings* settings,
                                          IInstancedMesh** instancedMesh) override;
@@ -91,14 +97,18 @@ public:
     CStaticMesh(CScene* scene,
                 IPLStaticMeshSettings* settings);
 
+#ifdef IPL_ENABLE_SERIALIZATION
     CStaticMesh(CScene* scene,
                 ISerializedObject* serializedObject);
+#endif
 
     virtual IStaticMesh* retain() override;
 
     virtual void release() override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual void save(ISerializedObject* serializedObject) override;
+#endif
 
     virtual void add(IScene* scene) override;
 
