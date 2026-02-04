@@ -70,7 +70,9 @@ public:
                                 const Probe* probes,
                                 const Sphere& endpointInfluence) override;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     virtual uint64_t serializedSize() const override;
+#endif
 
     virtual void evaluateEnergyField(const ProbeNeighborhood& neighborhood, EnergyField& energyField) override;
 

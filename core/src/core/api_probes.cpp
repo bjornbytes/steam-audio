@@ -269,9 +269,11 @@ IPLsize CProbeBatch::getDataSize(IPLBakedDataIdentifier* identifier)
 
     const auto& _identifier = *reinterpret_cast<BakedDataIdentifier*>(identifier);
 
+#if IPL_ENABLE_SERIALIZATION
     if (_probeBatch->hasData(_identifier))
         return static_cast<IPLsize>((*_probeBatch)[_identifier].serializedSize());
     else
+#endif
         return 0;
 }
 

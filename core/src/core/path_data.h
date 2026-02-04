@@ -183,10 +183,10 @@ public:
                                  int end,
                                  ProbePath* probePath) const;
 
+#ifdef IPL_ENABLE_SERIALIZATION
     // Returns the size (in bytes) of the baked data.
     virtual uint64_t serializedSize() const override;
 
-#ifdef IPL_ENABLE_SERIALIZATION
     // Saves the baked data to a serialized object.
     flatbuffers::Offset<Serialized::BakedPathingData> serialize(SerializedObject& serializedObject) const;
 #endif

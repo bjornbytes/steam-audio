@@ -106,7 +106,9 @@ public:
                                 const Probe* probes,
                                 const Sphere& endpointInfluence) = 0;
 
+#if IPL_ENABLE_SERIALIZATION
     virtual uint64_t serializedSize() const = 0;
+#endif
 };
 
 }
