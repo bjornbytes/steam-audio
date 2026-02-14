@@ -714,7 +714,7 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64 AND BUILD_SHARED_LIBS)
     set_target_properties(phonon PROPERTIES LINK_FLAGS "/DELAYLOAD:opencl.dll /DELAYLOAD:gpuutilities.dll /DELAYLOAD:trueaudionext.dll")
 endif()
 
-if (IPL_OS_LINUX AND BUILD_SHARED_LIBS AND (NOT IPL_CPU_ARMV8))
+if (IPL_OS_LINUX AND BUILD_SHARED_LIBS AND (NOT IPL_CPU_ARMV8) AND CMAKE_BUILD_TYPE STREQUAL "Release")
     add_custom_command(
         TARGET      phonon
         POST_BUILD
