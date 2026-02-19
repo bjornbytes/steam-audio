@@ -30,14 +30,17 @@ AmbisonicsBinauralEffect::AmbisonicsBinauralEffect(const AudioSettings& audioSet
                                                    const AmbisonicsBinauralEffectSettings& effectSettings)
     : mFrameSize(audioSettings.frameSize)
     , mMaxOrder(effectSettings.maxOrder)
-    , mHRIRSize(effectSettings.hrtf->numSamples())
     , mOverlapAddEffects(SphericalHarmonics::numCoeffsForOrder(effectSettings.maxOrder))
     , mOverlapAddEffectStates(SphericalHarmonics::numCoeffsForOrder(effectSettings.maxOrder))
     , mSpatializedChannel(2, audioSettings.frameSize)
 {
     PROFILE_FUNCTION();
 
-    init(*effectSettings.hrtf);
+    if (effectSettings.hrtf)
+    {
+        init(*effectSettings.hrtf);
+    }
+
     reset();
 }
 

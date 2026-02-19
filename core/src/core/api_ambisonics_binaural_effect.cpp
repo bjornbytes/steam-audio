@@ -60,17 +60,15 @@ CAmbisonicsBinauralEffect::CAmbisonicsBinauralEffect(CContext* context,
     if (!_context)
         throw Exception(Status::Failure);
 
-    auto _hrtf = reinterpret_cast<CHRTF*>(effectSettings->hrtf)->mHandle.get();
-    if (!_hrtf)
-        throw Exception(Status::Failure);
-
     AudioSettings _audioSettings{};
     _audioSettings.samplingRate = audioSettings->samplingRate;
     _audioSettings.frameSize = audioSettings->frameSize;
 
     AmbisonicsBinauralEffectSettings _effectSettings{};
     _effectSettings.maxOrder = effectSettings->maxOrder;
-    _effectSettings.hrtf = _hrtf.get();
+
+    if (effectSettings->hrtf)
+        _effectSettings.hrtf = reinterpret_cast<CHRTF*>(effectSettings->hrtf)->mHandle.get().get();
 
     new (&mHandle) Handle<AmbisonicsBinauralEffect>(ipl::make_shared<AmbisonicsBinauralEffect>(_audioSettings, _effectSettings), _context);
 }

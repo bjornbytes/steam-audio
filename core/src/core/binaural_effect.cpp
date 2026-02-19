@@ -32,7 +32,11 @@ BinauralEffect::BinauralEffect(const AudioSettings& audioSettings,
 {
     PROFILE_FUNCTION();
 
-    init(*effectSettings.hrtf);
+    if (effectSettings.hrtf)
+    {
+        init(*effectSettings.hrtf);
+    }
+
     reset();
 }
 
