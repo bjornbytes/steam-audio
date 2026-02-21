@@ -39,9 +39,9 @@ AmbisonicsBinauralEffect::AmbisonicsBinauralEffect(const AudioSettings& audioSet
     if (effectSettings.hrtf)
     {
         init(*effectSettings.hrtf);
-    }
 
-    reset();
+        reset();
+    }
 }
 
 void AmbisonicsBinauralEffect::reset()

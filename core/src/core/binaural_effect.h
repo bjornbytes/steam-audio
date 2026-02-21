@@ -54,7 +54,7 @@ public:
 
     AudioEffectState tail(AudioBuffer& out);
 
-    int numTailSamplesRemaining() const { return mOverlapAddEffect->numTailSamplesRemaining(); }
+    int numTailSamplesRemaining() const { return mOverlapAddEffect ? mOverlapAddEffect->numTailSamplesRemaining() : 0; }
 
 private:
     int mSamplingRate;

@@ -35,9 +35,9 @@ BinauralEffect::BinauralEffect(const AudioSettings& audioSettings,
     if (effectSettings.hrtf)
     {
         init(*effectSettings.hrtf);
-    }
 
-    reset();
+        reset();
+    }
 }
 
 void BinauralEffect::reset()
