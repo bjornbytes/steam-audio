@@ -42,7 +42,8 @@ BinauralEffect::BinauralEffect(const AudioSettings& audioSettings,
 
 void BinauralEffect::reset()
 {
-    mOverlapAddEffect->reset();
+    if (mOverlapAddEffect)
+        mOverlapAddEffect->reset();
 }
 
 AudioEffectState BinauralEffect::apply(const BinauralEffectParams& params,
