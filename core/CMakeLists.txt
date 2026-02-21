@@ -260,7 +260,7 @@ endif()
 
 set(BUILD_TESTS OFF CACHE BOOL "")
 add_subdirectory(deps/mysofa EXCLUDE_FROM_ALL)
-target_include_directories(mysofa-static PRIVATE "${PROJECT_BINARY_DIR}/deps/mysofa/src")
+target_compile_definitions(mysofa-static PUBLIC mysofa_STATIC_DEFINE)
 
 if (STEAMAUDIO_ENABLE_SERIALIZATION)
     find_package(FlatBuffers REQUIRED)
