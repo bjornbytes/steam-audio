@@ -174,9 +174,6 @@ if (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         add_compile_options(-m32 -mfpmath=sse -march=native)
     endif()
-    if (STEAMAUDIO_ENABLE_AVX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        add_compile_options(-fabi-version=6)
-    endif()
 endif()
 
 # macOS flags
