@@ -4,3 +4,6 @@
 [submodule "core/deps/mysofa"]
 	path = core/deps/mysofa
 	url = https://github.com/hoene/libmysofa.git
+[submodule "core/deps/zlib"]
+	path = core/deps/zlib
+	url = https://github.com/madler/zlib

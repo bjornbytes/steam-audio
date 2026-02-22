@@ -258,6 +258,16 @@ if (STEAMAUDIO_ENABLE_MKL)
     endif()
 endif()
 
+add_subdirectory(deps/zlib EXCLUDE_FROM_ALL)
+set(ZLIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/deps/zlib;${PROJECT_BINARY_DIR}/deps/zlib" CACHE STRING "")
+
+add_library(MySOFA::zlib IMPORTED INTERFACE)
+set_target_properties(MySOFA::zlib PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${ZLIB_INCLUDE_DIR}"
+  INTERFACE_LINK_LIBRARIES zlibstatic)
+
+set(ZLIB_LIBRARIES MySOFA::zlib CACHE STRING "")
+
 set(BUILD_TESTS OFF CACHE BOOL "")
 add_subdirectory(deps/mysofa EXCLUDE_FROM_ALL)
 target_compile_definitions(mysofa-static PUBLIC MYSOFA_STATIC)
