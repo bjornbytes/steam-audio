@@ -146,7 +146,7 @@ endif()
 # hrtf2sh
 #
 
-if (IPL_OS_WINDOWS AND IPL_CPU_X64)
+if (IPL_OS_WINDOWS AND IPL_CPU_X64 AND STEAMAUDIO_ENABLE_IPP)
     add_executable(hrtf2sh
         log.cpp
         memory_allocator.cpp
